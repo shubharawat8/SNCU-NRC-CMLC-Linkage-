@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+/* Dark mode is driven by next-themes writing data-theme on <html>. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ───────────────────────── Design tokens ─────────────────────────
+   Claymorphism: soft pastel planes, generous radii, a large soft outer
+   shadow + a light top-left inner highlight + a faint bottom-right inner
+   shade. See memory-bank/DESIGNS.md for the full spec. */
+:root {
+  color-scheme: light;
+  --bg: #eceff8;
+  --bg-accent-1: #dfe7ff;
+  --bg-accent-2: #fde4ee;
+  --surface: #f7f8fc;
+  --surface-2: #ffffff;
+  --sunken: #e4e8f3;
+  --ink: #1b2033;
+  --ink-2: #4a5068;
+  --muted: #6b7189;
+  --line: rgba(27, 32, 51, 0.08);
+  --ring: #5b6cff;
+
+  --clay-out: 12px 14px 30px rgba(84, 99, 150, 0.22), -10px -10px 24px rgba(255, 255, 255, 0.9);
+  --clay-out-sm: 6px 8px 16px rgba(84, 99, 150, 0.2), -6px -6px 14px rgba(255, 255, 255, 0.85);
+  --clay-in-hi: inset 4px 4px 10px rgba(255, 255, 255, 0.85);
+  --clay-in-lo: inset -6px -6px 12px rgba(84, 99, 150, 0.12);
+  --clay-pressed: inset 6px 6px 12px rgba(84, 99, 150, 0.2), inset -6px -6px 12px rgba(255, 255, 255, 0.85);
+
+  /* Care-level tones: strong (icons/accents) + soft (pastel planes). */
+  --tone-sncu: #3d6fe0;        --tone-sncu-soft: #dbe6ff;
+  --tone-stepdown: #7a5ae0;    --tone-stepdown-soft: #e7defe;
+  --tone-clmc: #d14d86;        --tone-clmc-soft: #fde0ec;
+  --tone-counsellor: #13957a;  --tone-counsellor-soft: #d5f4ea;
+  --tone-followup: #b8780a;    --tone-followup-soft: #fdefcf;
+  --tone-nrc: #d9622b;         --tone-nrc-soft: #ffe2d3;
+  --tone-community: #2f8f3a;   --tone-community-soft: #dcf3d9;
+
+  /* Data viz (validated: see memory-bank/DESIGNS.md §Data viz). */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --grid: #e1e0d9;
+  --axis: #8b8fa3;
+  --status-good: #0ca30c;
+  --status-watch: #fab219;
+  --status-act: #d03b3b;
+  --status-good-ink: #006300;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #12152a;
+  --bg-accent-1: #1c2350;
+  --bg-accent-2: #3a1c35;
+  --surface: #1e2235;
+  --surface-2: #262b42;
+  --sunken: #171a2b;
+  --ink: #eceef7;
+  --ink-2: #c3c7da;
+  --muted: #9aa0ba;
+  --line: rgba(255, 255, 255, 0.08);
+  --ring: #8f9bff;
+
+  --clay-out: 12px 14px 30px rgba(0, 0, 0, 0.45), -8px -8px 22px rgba(120, 132, 200, 0.08);
+  --clay-out-sm: 6px 8px 16px rgba(0, 0, 0, 0.4), -5px -5px 12px rgba(120, 132, 200, 0.07);
+  --clay-in-hi: inset 4px 4px 10px rgba(255, 255, 255, 0.07);
+  --clay-in-lo: inset -6px -6px 12px rgba(0, 0, 0, 0.3);
+  --clay-pressed: inset 6px 6px 12px rgba(0, 0, 0, 0.45), inset -6px -6px 12px rgba(120, 132, 200, 0.08);
+
+  --tone-sncu: #7fa4ff;        --tone-sncu-soft: #233061;
+  --tone-stepdown: #ae97ff;    --tone-stepdown-soft: #31285e;
+  --tone-clmc: #f48bb8;        --tone-clmc-soft: #4a2238;
+  --tone-counsellor: #4fd3b0;  --tone-counsellor-soft: #163f39;
+  --tone-followup: #f2bd55;    --tone-followup-soft: #44361a;
+  --tone-nrc: #ff9a6b;         --tone-nrc-soft: #4a2a1c;
+  --tone-community: #7fd486;   --tone-community-soft: #1f3f24;
+
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --grid: #2e3349;
+  --axis: #8b8fa3;
+  --status-good-ink: #0ca30c;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-fredoka), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --radius-clay: 1.75rem;
+  --radius-clay-lg: 2.25rem;
+}
+
+/* ───────────────────────── Clay utilities ───────────────────────── */
+@utility clay {
+  background: var(--surface);
+  border-radius: var(--radius-clay);
+  box-shadow: var(--clay-out), var(--clay-in-hi), var(--clay-in-lo);
+}
+@utility clay-sm {
+  background: var(--surface);
+  border-radius: 1.25rem;
+  box-shadow: var(--clay-out-sm), var(--clay-in-hi), var(--clay-in-lo);
+}
+@utility clay-inset {
+  background: var(--sunken);
+  border-radius: 1.25rem;
+  box-shadow: var(--clay-pressed);
+}
+@utility clay-pressed {
+  box-shadow: var(--clay-pressed);
+}
+
+/* Tone helpers: set --t / --t-soft on an element, then use tone-* classes. */
+.tone-sncu { --t: var(--tone-sncu); --t-soft: var(--tone-sncu-soft); }
+.tone-stepdown { --t: var(--tone-stepdown); --t-soft: var(--tone-stepdown-soft); }
+.tone-clmc { --t: var(--tone-clmc); --t-soft: var(--tone-clmc-soft); }
+.tone-counsellor { --t: var(--tone-counsellor); --t-soft: var(--tone-counsellor-soft); }
+.tone-followup { --t: var(--tone-followup); --t-soft: var(--tone-followup-soft); }
+.tone-nrc { --t: var(--tone-nrc); --t-soft: var(--tone-nrc-soft); }
+.tone-community { --t: var(--tone-community); --t-soft: var(--tone-community-soft); }
+
+@utility text-tone { color: var(--t); }
+@utility bg-tone-soft { background-color: var(--t-soft); }
+@utility bg-tone { background-color: var(--t); }
+@utility border-tone { border-color: var(--t); }
+
+/* ───────────────────────── Base ───────────────────────── */
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(60rem 40rem at 0% -10%, var(--bg-accent-1), transparent 60%),
+    radial-gradient(50rem 36rem at 110% 10%, var(--bg-accent-2), transparent 60%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; border-radius: 0.75rem; }
+::selection { background: var(--tone-sncu-soft); }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* ───────────────────────── Motion ───────────────────────── */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.animate-marquee { animation: marquee var(--marquee-duration, 40s) linear infinite; }
+.marquee-pause:hover .animate-marquee, .marquee-pause:focus-within .animate-marquee { animation-play-state: paused; }
+
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); } 50% { transform: translateY(-10px) rotate(var(--r, 0deg)); } }
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+@keyframes flow { to { stroke-dashoffset: -24; } }
+.animate-flow { animation: flow 1.2s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee, .animate-float, .animate-flow { animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .clay, .clay-sm { box-shadow: none; border: 1px solid #ddd; }
+}
